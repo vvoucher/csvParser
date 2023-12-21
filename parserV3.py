@@ -149,8 +149,6 @@ def draw_plots(data1, data2):
         # ax1.plot()
     # return axisx,axisy
     
-
-
 data195 = main_autogague("195")
 data215 = main_autogague("215") 
 # print(draw_plots(data195)[1])

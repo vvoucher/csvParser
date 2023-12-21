@@ -5,18 +5,21 @@ import numpy as numpy
 import matplotlib.pyplot as plt
 plt.close('all')
 
-
-def name_files(number):
-    
+def today_to_file():
     today = (datetime.today()).strftime("%Y_%m_%d")
-    path = "Report/RS" + number + "Day/" + "RS" + number + "Report" + today + ".csv"
+    return today
 
+def name_files(number, folder):
+    today = today_to_file() 
+    path = folder + "/RS" + number + "Day/" + "RS" + number + "Report" + today + ".csv"
+    print("Sciezka:         ", path)
     return path
 
 def open_csv_file(file_name):
 
     df=pd.read_csv(file_name, encoding = 'unicode_escape', engine ='python')
-    print("Plik: ", file_name, "\n")
+    print("Plik:        ", file_name, "\n")
+   
     return df
 
 def column_count(df):
@@ -90,45 +93,74 @@ def filter_NG(df):
         hours.append(hour)
 
     result = pd.DataFrame({'Hour': hours})
-
-    for col in range(first ,last ):
+    tfTable = pd.DataFrame({'Hour': hours})
+    for col in range(first ,last):
         name = "ST0" + str(col - first +1 )
         table = select(df,name).groupby('Hour').size()  
         table = table.to_frame()
         result[name]=table
         result=result.fillna("")
-        result = result.astype(str)
-        finish = result[result[name].str.strip().astype(bool)]
+
+    dropRows = []
+    for row2 in range(0,24):
+        i=0
+        for col2 in range(first, last):
+            if result.iloc[row2,col2-4] == "":
+                i+=1
+
+        if i == last-5:
+            dropRows.append(row2)
+
+    finish=result.drop(dropRows)
+    # print("CSV:        \n", result)
+    # print("Terminal:        \n", finish)
     return result, finish # 0,1
 
 def main_autogague(station):
-    file=name_files(station)
+    print("Stacja:      ", station)
+    file=name_files(station,"Report")
     dataBase = open_csv_file(file)
     dataBase = rename_header(dataBase)
     dataBase = create_timestamp(dataBase)
     dataBase = set_hours(dataBase)
     result = filter_NG(dataBase)[0]
-    print(filter_NG(dataBase)[1])
+    simpleResult = (filter_NG(dataBase)[1])
+    print("Obliczone \n")
+    # print(simpleResult)
+
+    pathToSave=name_files(station, "Graphs")
+    result.to_csv(pathToSave)
+
+    # print(result, "\n")
+    print("Zapisano dane:       ", pathToSave)
+    print("\n \n")
     return result
 
-def draw_plots(data):
+
+def draw_plots(data1, data2):
     fig, (ax1,ax2) = plt.subplots(2,1, sharex='col')
     axisy = []
-    axisx = data['Hour']
-    for col in range(1,len(data.T)): #transponowane bo inaczej wychodzi 24
+    axisx = data1['Hour']
+    for col in range(1,len(data1.T)): #transponowane bo inaczej wychodzi 24
         name = "ST0" + str(col)
-        axisy = data[name]
+        axisy = data1[name]
         ax1.plot(axisx,axisy) #, label = name)
         # ax1.plot()
-    return axisx,axisy
+    # return axisx,axisy
     
 
 
 data195 = main_autogague("195")
-data215 = main_autogague("215")
+data215 = main_autogague("215") 
 # print(draw_plots(data195)[1])
 
-plot215 = draw_plots(data215)
-plot195 = draw_plots(data195)
+# pathToSave195 = "Graphs/RS195DAY/Data_195_" + today_to_file() + ".csv"
+# pathToSave215 = "Graphs/RS215DAY/Data_215_" + today_to_file() + ".csv"
 
-plt.show()
+# data195.to_csv(pathToSave195)
+# data215.to_csv(pathToSave215)
+
+# plot215 = draw_plots(data215)
+# plot195 = draw_plots(data195)
+
+# plt.show()

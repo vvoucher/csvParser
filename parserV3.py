@@ -3,16 +3,19 @@ from datetime import datetime
 import time
 import numpy as numpy
 import matplotlib.pyplot as plt
-plt.close('all')
+from time import strftime
 
 def today_to_file():
     today = (datetime.today()).strftime("%Y_%m_%d")
     return today
 
-def name_files(number, folder):
+def name_files(number, folder, extension):
     today = today_to_file() 
-    path = folder + "/RS" + number + "Day/" + "RS" + number + "Report" + today + ".csv"
-    print("Sciezka:         ", path)
+    # print("Today: ", today)
+    # path = folder + "/RS" + number + "Day/" + "RS" + number + "Report" + today + ".csv"
+    path = folder + "\\" + "RS" + number + "Day" + "\\" + "RS" + number + "Report" + today + extension #".csv"
+    
+    # print("Sciezka:         ", path)
     return path
 
 def open_csv_file(file_name):
@@ -48,7 +51,6 @@ def rename_header(df):
         columnNames.append("ST0" + str(col-first+1))
     df.columns = columnNames + [*df.columns[last:]]
     return df
-
 
 def select(df, name):
     
@@ -119,47 +121,57 @@ def filter_NG(df):
 
 def main_autogague(station):
     print("Stacja:      ", station)
-    file=name_files(station,"Report")
+    file=name_files(station,"Report", ".csv")
     dataBase = open_csv_file(file)
     dataBase = rename_header(dataBase)
     dataBase = create_timestamp(dataBase)
     dataBase = set_hours(dataBase)
     result = filter_NG(dataBase)[0]
     simpleResult = (filter_NG(dataBase)[1])
-    print("Obliczone \n")
-    # print(simpleResult)
+    # print("Obliczone \n")
+    print(simpleResult)
 
-    pathToSave=name_files(station, "Graphs")
+    pathToSave=name_files(station, "Result", ".csv")
     result.to_csv(pathToSave)
 
     # print(result, "\n")
     print("Zapisano dane:       ", pathToSave)
-    print("\n \n")
+    # print("\n")
     return result
 
-
-def draw_plots(data1, data2):
-    fig, (ax1,ax2) = plt.subplots(2,1, sharex='col')
-    axisy = []
+def subplot_setup(ax1,data1):
+    axisy = pd.DataFrame()
     axisx = data1['Hour']
+    legend=[]
     for col in range(1,len(data1.T)): #transponowane bo inaczej wychodzi 24
         name = "ST0" + str(col)
-        axisy = data1[name]
-        ax1.plot(axisx,axisy) #, label = name)
-        # ax1.plot()
-    # return axisx,axisy
-    
+        legend.append(name)
+        axisy[name] = data1[name].astype(str)
+        ax1.plot(axisx,axisy[name])
+
+    ax1.set_ylabel("Liczba wystąpień")
+    ax1.grid(True)
+    ax1.set_title("Stacja 195")
+    ax1.legend(legend)
+    box = ax1.get_position()
+    ax1.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    ax1.legend(legend,loc='center left', bbox_to_anchor=(1, 0.5))
+  
 data195 = main_autogague("195")
 data215 = main_autogague("215") 
-# print(draw_plots(data195)[1])
 
-# pathToSave195 = "Graphs/RS195DAY/Data_195_" + today_to_file() + ".csv"
-# pathToSave215 = "Graphs/RS215DAY/Data_215_" + today_to_file() + ".csv"
+fig, (ax1,ax2) = plt.subplots(2,1, sharex='col')
 
-# data195.to_csv(pathToSave195)
-# data215.to_csv(pathToSave215)
+subplot_setup(ax1,data195)
+subplot_setup(ax2,data215)
+graphName = name_files("","Graphs",".png")# + ".png"
+fig.savefig(graphName, dpi=300, format='png')
+print("Wykres zapisano:     ", graphName)
+print("\n")
+sleepTime = 15
+now = strftime("%H:%M:%S")
+print(now,"To okno zamknie się za ", sleepTime,"sekund")
+time.sleep(sleepTime)
 
-# plot215 = draw_plots(data215)
-# plot195 = draw_plots(data195)
 
-# plt.show()
+

@@ -1,6 +1,7 @@
 from column_count import column_count
 import pandas as pd
 from select_NG import select_NG
+from tabulate import tabulate
 def filter_NG(df, line):
     if line == "A1":
         line = "7"
@@ -8,7 +9,10 @@ def filter_NG(df, line):
         line = "8"
     if line == "A3":
         line = "9"    
-        
+
+    # print(df['Result'].str.count('NG'))
+    # print(df['Result'].groupby('Result'))
+    
     df['ID']=df['ID'].astype(str).str[16:17]
     df = df.loc[(df['ID'] == line)] 
     table = []
@@ -17,13 +21,12 @@ def filter_NG(df, line):
     hours = []
     for hour in range(0,24):
         hours.append(hour)
-
+  
     result = pd.DataFrame({'Hour': hours})
     # tfTable = pd.DataFrame({'Hour': hours})
     for col in range(first ,last):
         name = "ST0" + str(col - first +1 )
         table = select_NG(df,name).groupby('Hour').size()  
-        # print(table)
         table = table.to_frame()
         result[name]=table
         result=result.fillna("")

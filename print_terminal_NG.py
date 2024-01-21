@@ -6,18 +6,21 @@ from drop_rows import drop_rows
 from name_files import name_files
 
 def print_terminal_NG(stacja, linia, db):
-
+    
+    # print(db)#['Result'])#/db.groupby('Result'))
     db = create_timestamp(db)
     db = set_hours(db)
-    df1 = filter_NG(db, linia)
-
+    df1, count, ngCount, selectNGlist = filter_NG(db, linia)
+    
     pathToSave=name_files(stacja, "Result", "_" + linia + ".csv")
     df1.to_csv(pathToSave)
     df1 = df1.dropna(how='all', axis=1) 
     df1 = df1.fillna("")
     print("\n   Stacja " + stacja + " " + linia)
+    # print("Procent NG: ",ngPercent, "%")
     # print(tabulate(drop_rows(df1.drop('Hour', axis=1)), headers=df1.head()))
     print(tabulate(drop_rows(df1), headers=df1.head()))
     print("Zapisano dane:       ", pathToSave)
+    return count, ngCount, selectNGlist
 
  

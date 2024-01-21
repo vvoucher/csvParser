@@ -17,6 +17,8 @@ if(db195.size > 10):
     stX_plot(db195,"A2")
     stX_plot(db215,"A1")
     stX_plot(db215,"A2")
+else:
+    print("Za mało pomiarów by wygenerować wykres")
 
 print_terminal_NG("195", "A1", db195)
 print_terminal_NG("195", "A2", db195)
@@ -26,5 +28,5 @@ print_terminal_NG("215", "A2", db215)
 endTime=time.time()
 print("Czas kalkulacji: ", round((endTime-startTime)*100)/100, 's')
 
-# delay_terminal(15)
+delay_terminal(15)
 

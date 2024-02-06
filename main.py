@@ -6,6 +6,7 @@ from load_db import load_db
 import pandas as pd
 from tabulate import tabulate
 from name_files import name_files
+import os
 
 startTime = time.time()
 ngTable = pd.DataFrame()
@@ -34,15 +35,18 @@ def prc(ngCount, Count):
     return n
 
 indexes = ["195 A1", "195 A2", "215 A1", "215 A2"]
-count = [c195a1,c215a1, c195a2, c215a2]
-ngTable = [n195a1, n215a2, n195a2, n215a2]
-prcTable = [prc(n195a1,c195a1), prc(n215a1,c215a1), prc(n195a2,c195a2), prc(n215a2,c215a2)]
+count = [c195a1,c195a2, c215a1, c215a2]
+ngTable = [n195a1, n195a2, n215a1, n215a2]
+prcTable = [prc(n195a1,c195a1), prc(n195a2,c195a2), prc(n215a1,c215a1), prc(n215a2,c215a2)]
 
 ngDF = pd.DataFrame({'Liczba': count,'NG': ngTable,'Procent NG': prcTable, "Name": indexes})
 ngDF = ngDF.set_index('Name')
 
 print("\n", tabulate(ngDF, headers=ngDF.head()),"\n")
 
+dayResultFileName  = name_files("","Result", ".csv")
+ngDF.to_csv(dayResultFileName)
+print("Zapisano do pliku: ", dayResultFileName)
 qcDF195=pd.concat([ngList1,ngList2])
 qcDF195 = qcDF195.dropna(how='all', axis=1) 
 qcDF195 = qcDF195.fillna("")
@@ -52,11 +56,15 @@ qcDF215 = qcDF215.dropna(how='all', axis=1)
 qcDF215 = qcDF215.fillna("")
 
 qc195name= name_files("195","QC",".csv")
+
 qcDF195.to_csv(qc195name)
+
 qc215name= name_files("215","QC",".csv")
+
 qcDF215.to_csv(qc215name)
+
 
 endTime=time.time()
 print("Czas kalkulacji: ", round((endTime-startTime)*100)/100, 's')
-delay_terminal(0)
+delay_terminal(20)
 

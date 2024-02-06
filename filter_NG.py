@@ -17,13 +17,13 @@ def filter_NG(df, line):
     newNGlist = df.loc[df['Result'] == "NG"]
 
     selectNGlist = pd.DataFrame()
-    selectNGlist['ID'] = newNGlist['ID']
+    selectNGlist['FrameID'] = newNGlist['ID']
 
     table = []
     first = column_count(df)[0]
     last = column_count(df)[1]
     hours = []
-    for hour in range(0,24):
+    for hour in range(0,25):
         hours.append(hour)
     result2 = pd.DataFrame({'Hour': hours})
 
@@ -50,8 +50,8 @@ def filter_NG(df, line):
     # selectNGlist = selectNGlist.dropna(how='all', axis=1) 
     # selectNGlist = selectNGlist.fillna("")
     pointsTable.append('Hour')
-    selectNGlist = selectNGlist.set_index(selectNGlist['ID'])
-    selectNGlist = selectNGlist.drop('ID', axis=1)
+    selectNGlist = selectNGlist.set_index(selectNGlist['FrameID'])
+    selectNGlist = selectNGlist.drop('FrameID', axis=1)
     # print(selectNGlist)
 
     table3 = []
@@ -60,6 +60,7 @@ def filter_NG(df, line):
     for col in range(0, len(pointsTable)):
             temp = result2.loc[result2[pointsTable[col]] == "NG"]
             table3=temp.groupby('Hour').size()
+            # print(table3)
             result3[pointsTable[col]] = table3
             # result3=result3.fillna("")
     combined = pd.concat([result, result3], axis=1, join='inner')

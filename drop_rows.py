@@ -4,7 +4,7 @@ def drop_rows(df):
     # last = column_count(df)[1]
     last = len(df.columns)
     dropRows = []
-    for row2 in range(0,24):
+    for row2 in range(0,25):
         i=0
         for col2 in range(first, last):
             if df.iloc[row2,col2] == "":

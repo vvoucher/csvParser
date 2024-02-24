@@ -3,7 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+# FS ST01(0 0.8),ST02(0 0.8),ST03(0 1.0),ST04(0 1.0),ST05(-1.0 1.0),ST06(-1.0 1.0),ST07(-1.0 0.5),ST08(-1.0 0.5),ST09(-1.0 1.0),ST10(-1.0 1.0),ST11(0 0.8),ST12(0 0.8),ST13(0 0.6)
 from column_count import column_count
+
+min = [0, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0]
+max = [0.8, 0.8, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.8, 0.8, 0.6]
 
 def stX_plot(db, line):
     if line == "A1":

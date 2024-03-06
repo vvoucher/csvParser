@@ -21,9 +21,12 @@ def stX_plot(db, line):
     print(short)
     # plt.style.use("seaborn")
     plt.rc('ytick', labelsize=6) 
-
+    #df['Comedy_Score'].where(df['Rating_Score'] < 50)
     DbForLineNmber = pd.DataFrame()
-    DbForLineNmber = db[db['LineNumber'] == short]
+    # DbForLineNmber.index = db.index
+    # print(db['LineNumber']=="7")
+    DbForLineNmber = db[db['LineNumber'] == str(short)]
+
     first = column_count(DbForLineNmber)[0]
     last = column_count(DbForLineNmber)[1]
     rows = last-first
@@ -51,12 +54,12 @@ def stX_plot(db, line):
         yloc = plt.MaxNLocator(max_yticks)
         ax[col-1].yaxis.set_major_locator(yloc)
         legend.append(name)
-
+        # print(DbForLineNmber["ST01"])
         max = DbForLineNmber[name].max()
         min = DbForLineNmber[name].min()
         if np.isnan(max):
-            max = 0
-            min = 0
+            max=1
+            min=-1
 
         if max < 0.9:
             max = 0.9

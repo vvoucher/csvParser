@@ -10,7 +10,7 @@ from column_count import column_count
 # max = [0.8, 0.8, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.8, 0.8, 0.6]
 
 def whichLineID(line):
-    for l in range(1,3): #1 2 3 
+    for l in range(1,4): #1 2 3 
         lineName = "A" + str(l)
         if line == lineName:
             return l + 6 # 7 8 9 
@@ -18,7 +18,7 @@ def whichLineID(line):
 def stX_plot(db, line):
 
     short = whichLineID(line)
-    print(short)
+    # print(short)
     # plt.style.use("seaborn")
     plt.rc('ytick', labelsize=6) 
     #df['Comedy_Score'].where(df['Rating_Score'] < 50)

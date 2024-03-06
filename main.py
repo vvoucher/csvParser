@@ -17,11 +17,12 @@ db195 = load_db("195")
 db215['LineNumber']=db215['ID'].astype(str).str[16:17]
 db195['LineNumber']=db195['ID'].astype(str).str[16:17]
 
-for l in range(1,3):
+for l in range(1,4):
     lineName= "A" + str(l)
     if(db195.size > 10):
         stX_plot(db195,lineName)
         stX_plot(db215,lineName)
+        # print(lineName)
     else:
         print("Za mało pomiarów by wygenerować wykres")
 

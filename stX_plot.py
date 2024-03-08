@@ -5,7 +5,7 @@ import pandas as pd
 
 # FS ST01(0 0.8),ST02(0 0.8),ST03(0 1.0),ST04(0 1.0),ST05(-1.0 1.0),ST06(-1.0 1.0),ST07(-1.0 0.5),ST08(-1.0 0.5),ST09(-1.0 1.0),ST10(-1.0 1.0),ST11(0 0.8),ST12(0 0.8),ST13(0 0.6)
 from column_count import column_count
-
+from no_file import no_file
 # min = [0, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0]
 # max = [0.8, 0.8, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.8, 0.8, 0.6]
 
@@ -80,4 +80,7 @@ def stX_plot(db, line):
         ax[col-1].plot(axisx, lower,  '-.',axisx, upper,  '-.',linewidth=0.5, color = 'red')
         ax[col-1].plot(axisx,axisy[name])
     graphName = name_files("","Graphs","_" + myName + ".png")# + ".png"
-    fig.savefig(graphName, dpi=300, format='png')
+    try:
+        fig.savefig(graphName, dpi=300, format='png')
+    except:
+        no_file(graphName)

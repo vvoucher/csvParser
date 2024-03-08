@@ -6,16 +6,17 @@ from load_db import load_db
 import pandas as pd
 from tabulate import tabulate
 from name_files import name_files
-import os
-
+from pathfinder import pathfinder
+from no_file import no_file
 startTime = time.time()
 ngTable = pd.DataFrame()
+# pathfinder()
 
 db215 = load_db("215")
 db195 = load_db("195")
 
-db215['LineNumber']=db215['ID'].astype(str).str[16:17]
-db195['LineNumber']=db195['ID'].astype(str).str[16:17]
+# db215['LineNumber']=db215['ID'].astype(str).str[16:17]
+# db195['LineNumber']=db195['ID'].astype(str).str[16:17]
 
 for l in range(1,4):
     lineName= "A" + str(l)
@@ -51,7 +52,12 @@ ngDF = ngDF.set_index('Name')
 print("\n", tabulate(ngDF, headers=ngDF.head()),"\n")
 
 dayResultFileName  = name_files("","Result", ".csv")
-ngDF.to_csv(dayResultFileName)
+try:
+    ngDF.to_csv(dayResultFileName)
+except:
+    no_file(dayResultFileName)
+
+
 print("Zapisano do pliku: ", dayResultFileName)
 
 qcDF195=pd.concat([ngList1,ngList2, ngList3])
@@ -63,13 +69,16 @@ qcDF215 = qcDF215.dropna(how='all', axis=1)
 qcDF215 = qcDF215.fillna("")
 
 qc195name= name_files("195","QC",".csv")
-
-qcDF195.to_csv(qc195name)
-
+try:
+    qcDF195.to_csv(qc195name)
+except:
+    no_file(qcDF195)
 qc215name= name_files("215","QC",".csv")
 
-qcDF215.to_csv(qc215name)
-
+try:
+    qcDF215.to_csv(qc215name)
+except:
+    no_file(qcDF215)
 
 endTime=time.time()
 print("Czas kalkulacji: ", round((endTime-startTime)*100)/100, 's')

@@ -6,25 +6,16 @@ import pandas as pd
 # FS ST01(0 0.8),ST02(0 0.8),ST03(0 1.0),ST04(0 1.0),ST05(-1.0 1.0),ST06(-1.0 1.0),ST07(-1.0 0.5),ST08(-1.0 0.5),ST09(-1.0 1.0),ST10(-1.0 1.0),ST11(0 0.8),ST12(0 0.8),ST13(0 0.6)
 from column_count import column_count
 from no_file import no_file
+from whichLineID import whichLineID
+from subframe import subframe
 # min = [0, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0]
 # max = [0.8, 0.8, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.8, 0.8, 0.6]
 
-def whichLineID(line):
-    for l in range(1,4): #1 2 3 
-        lineName = "A" + str(l)
-        if line == lineName:
-            return l + 6 # 7 8 9 
-
-def stX_plot(db, line):
+def stX_plot(db, line, subframe):
 
     short = whichLineID(line)
-    # print(short)
-    # plt.style.use("seaborn")
     plt.rc('ytick', labelsize=6) 
-    #df['Comedy_Score'].where(df['Rating_Score'] < 50)
     DbForLineNmber = pd.DataFrame()
-    # DbForLineNmber.index = db.index
-    # print(db['LineNumber']=="7")
     DbForLineNmber = db[db['LineNumber'] == str(short)]
 
     first = column_count(DbForLineNmber)[0]
@@ -36,13 +27,14 @@ def stX_plot(db, line):
         myName = "195_" + line
     if rows == 13:
         myName = "155_" + line
+    # else:
+    #     print("wiersze: ", rows)
     fig, ax = plt.subplots(rows, 1)#, sharex='all')
     axisy = pd.DataFrame()
     axisx = DbForLineNmber['No']
     legend=[]
     fig.suptitle(myName)
 
-    # plt.minorticks_on()
     max_yticks = 5
     
     for col in range(1,rows+1): #transponowane bo inaczej wychodzi 24
@@ -79,6 +71,8 @@ def stX_plot(db, line):
         
         ax[col-1].plot(axisx, lower,  '-.',axisx, upper,  '-.',linewidth=0.5, color = 'red')
         ax[col-1].plot(axisx,axisy[name])
+    
+    # graphName = subframe.nameGraph(sta)
     graphName = name_files("","Graphs","_" + myName + ".png")# + ".png"
     try:
         fig.savefig(graphName, dpi=300, format='png')

@@ -3,7 +3,7 @@ def column_count(df):
     first = 0
     last = 0
     for n in range(0,len(df.columns)):
-        if ("ST0" in df.columns[n]):
+        if ("ST" in df.columns[n]):
             o += 1
             if ("ST01" in df.columns[n]):
                 first = n

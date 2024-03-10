@@ -3,11 +3,11 @@ from open_csv_file import open_csv_file
 from rename_header import rename_header
 import os
 from no_file import no_file 
+from subframe import subframe
 
-def load_db(station):
-    file=name_files(station,"Report", ".csv")
-    # if ~os.path.exists(file):
-    #     print("brak: ", file)
+def load_db(station, subframe):
+    # file=name_files(station,"Report", ".csv")
+    file = subframe.nameOpen(station)
     try:        
         db = open_csv_file(file)
     except:

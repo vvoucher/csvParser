@@ -2,13 +2,10 @@ from column_count import column_count
 import pandas as pd
 from select_NG import select_NG
 import numpy as np
+from whichLineID import whichLineID
 def filter_NG(df, line):
-    if line == "A1":
-        line = "7"
-    if line == "A2":
-        line = "8"
-    if line == "A3":
-        line = "9"    
+
+    line = str(whichLineID(line))
     df = df.loc[(df['LineNumber'] == line)]
     
     ngCount = sum(df['Result'] == "NG")
@@ -25,10 +22,10 @@ def filter_NG(df, line):
     hours = []
     for hour in range(0,25):
         hours.append(hour)
-    result2 = pd.DataFrame({'Hour': hours})
 
     result = pd.DataFrame({'Hour': hours})
-
+    result2 = pd.DataFrame({'Hour': hours})
+    
     for col in range(first ,last):
         name = "ST0" + str(col - first +1 )
         table = select_NG(df,name).groupby('Hour').size()  

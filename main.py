@@ -1,50 +1,52 @@
 import time
+import pandas as pd
+
 from delay_terminal import delay_terminal
 from stX_plot import stX_plot
 from print_terminal_NG import print_terminal_NG
 from load_db import load_db
-import pandas as pd
 from tabulate import tabulate
 from name_files import name_files
 from pathfinder import pathfinder
 from no_file import no_file
+from whichLineID import whichLineID
+from prc import prc
+from NG_for_line import NG_for_line
+from subframe import subframe
+
 startTime = time.time()
 ngTable = pd.DataFrame()
 # pathfinder()
+my_subframe = subframe()
+# print(my_subframe.which())
+# print(my_subframe.nameFile("215", "Result"))
+# print(my_subframe.nameGraph("215"))
 
-db215 = load_db("215")
-db195 = load_db("195")
+# print(my_subframe.nameOpen("215"))
 
-# db215['LineNumber']=db215['ID'].astype(str).str[16:17]
-# db195['LineNumber']=db195['ID'].astype(str).str[16:17]
+db215 = load_db("215", my_subframe)
+db195 = load_db("195", my_subframe)
 
 for l in range(1,4):
     lineName= "A" + str(l)
     if(db195.size > 10):
-        stX_plot(db195,lineName)
-        stX_plot(db215,lineName)
+        stX_plot(db195,lineName, subframe)
+        stX_plot(db215,lineName, subframe)
         # print(lineName)
     else:
         print("Za mało pomiarów by wygenerować wykres")
 
-c195a1, n195a1, ngList1 = print_terminal_NG("195", "A1", db195)
-c195a2, n195a2, ngList2 = print_terminal_NG("195", "A2", db195)
-c195a3, n195a3, ngList3 = print_terminal_NG("195", "A3", db195)
-c215a1, n215a1, ngList4 = print_terminal_NG("215", "A1", db215)
-c215a2, n215a2, ngList5 = print_terminal_NG("215", "A2", db215)
-c215a3, n215a3, ngList6 = print_terminal_NG("215", "A3", db215)
+A1_195 = NG_for_line(db195, "195", "A1")
+A2_195 = NG_for_line(db195, "195", "A2")
+A3_195 = NG_for_line(db195, "195", "A3")
+A1_215 = NG_for_line(db215, "215", "A1")
+A2_215 = NG_for_line(db215, "215", "A2")
+A3_215 = NG_for_line(db215, "215", "A3")
 
-def prc(ngCount, Count):
-    if (Count != 0):
-        n = round((ngCount/Count)*1000)/10
-    else:
-        n = 0
-    return n
-
-indexes = ["195 A1", "195 A2","195 A3", "215 A1", "215 A2", "215 A3"]
-count = [c195a1,c195a2, c195a3, c215a1, c215a2, c215a3]
-ngTable = [n195a1, n195a2, n195a3, n215a1, n215a2, n215a3]
-prcTable = [prc(n195a1,c195a1), prc(n195a2,c195a2), prc(n195a3,c195a3), prc(n215a1,c215a1), prc(n215a2,c215a2), prc(n215a3,c215a3)]
+indexes =   [A1_195.name, A2_195.name, A3_195.name,             A1_215.name, A2_215.name, A3_215.name ]
+count =     [A1_195.count, A2_195.count, A3_195.count,          A1_215.count, A2_215.count, A3_215.count]
+ngTable =   [A1_195.ngCount, A2_195.ngCount, A3_195.ngCount,    A1_215.ngCount, A2_215.ngCount, A3_215.ngCount]
+prcTable =  [A1_195.procent, A2_195.procent, A3_195.procent,    A1_215.procent, A2_215.procent, A3_215.procent] 
 
 ngDF = pd.DataFrame({'Liczba': count,'NG': ngTable,'Procent NG': prcTable, "Name": indexes})
 ngDF = ngDF.set_index('Name')
@@ -60,11 +62,11 @@ except:
 
 print("Zapisano do pliku: ", dayResultFileName)
 
-qcDF195=pd.concat([ngList1,ngList2, ngList3])
+qcDF195=pd.concat([A1_195.selectNGlist,A2_195.selectNGlist, A3_195.selectNGlist])
 qcDF195 = qcDF195.dropna(how='all', axis=1) 
 qcDF195 = qcDF195.fillna("")
 
-qcDF215=pd.concat([ngList4,ngList5, ngList6])
+qcDF215=pd.concat([A1_215.selectNGlist, A2_215.selectNGlist, A3_215.selectNGlist])
 qcDF215 = qcDF215.dropna(how='all', axis=1) 
 qcDF215 = qcDF215.fillna("")
 
@@ -73,8 +75,8 @@ try:
     qcDF195.to_csv(qc195name)
 except:
     no_file(qcDF195)
-qc215name= name_files("215","QC",".csv")
 
+qc215name= name_files("215","QC",".csv")
 try:
     qcDF215.to_csv(qc215name)
 except:

@@ -1,13 +1,11 @@
-from name_files import name_files
 from open_csv_file import open_csv_file
 from rename_header import rename_header
-import os
 from no_file import no_file 
 from subframe import subframe
 
-def load_db(station, subframe):
-    # file=name_files(station,"Report", ".csv")
-    file = subframe.nameOpen(station)
+def load_db(station, my_subframe):
+    file = my_subframe.nameOpen(station)
+    print(file)
     try:        
         db = open_csv_file(file)
     except:

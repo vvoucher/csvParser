@@ -7,12 +7,12 @@ pathRsExist = False
 
 def pathfinder():
     if os.path.exists(pathRS):
-        print("Istnieje scieżka RS")
+        # print("Istnieje scieżka RS")
         pathRsExist = True
     else:
         pathRsExist = False
     if os.path.exists(pathFS):
-        print("Istnieje scieżka FS")
+        # print("Istnieje scieżka FS")
         pathFsExist = True
         if (pathRsExist):# and pathFsExist):
             print("Istnieją dwie ścieżki",  pathFS, pathRS)

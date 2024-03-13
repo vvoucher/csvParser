@@ -8,6 +8,9 @@ def rename_header(df):
 
     columnNames = ['No','Date','Time','ID','Result']
     for col in range(first,last):
-        columnNames.append("ST0" + str(col-first+1))
+        if (col-first) < 9:
+            columnNames.append("ST0" + str(col-first+1))
+        if (col-first) >= 9:
+            columnNames.append("ST" + str(col-first+1))
     df.columns = columnNames + [*df.columns[last:]]
     return df

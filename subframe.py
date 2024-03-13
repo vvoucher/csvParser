@@ -19,29 +19,38 @@ class subframe:
                 self.nameBase = "D:\\"
     
     def which(self):
+        
         return self.side
     
     def nameOpen(self, station):
+        # self.side = side
         self.station = station
-        if self.side == "RS":
+        if ((self.station == "215") or (self.station == "195")):
             return self.nameBase + "Report\\" + self.side + self.station + "DAY\\" + self.side + self.station + "Report" + self.today + ".csv"
-        if self.side == "FS":
+        if self.station == "155":
             return self.nameBase + "ReportDay\\Report" + self.today + ".csv"
 
-    def nameGraph(self, station):
+    def nameGraph(self, station, line):
+        # RSReport2024_1_13_195_A2
         self.station = station
-        if self.side == "RS":
-            return self.nameBase + self.folder +"\\" + self.side + self.station +  "DAY" + "\\" + self.side + self.station + self.today + ".png"
+        self.line = line
+        if (self.station == "215") or (self.station == "195"):
+            return self.nameBase + "Graphs\\" + self.side + self.station +  "DAY" + "\\" + self.side + "Report" + self.today +"_" + self.station + "_" + self.line + ".png"
 
-        if self.side == "FS":
-            return self.nameBase + "Graphs\\"  + self.side + "Report" + self.today + ".png"
+        if self.station == "155":
+            return self.nameBase + "Graphs\\"  + self.side + "Report" + self.today + "_" + self.station + "_" + self.line + ".png"
         pass    
-    def nameFile(self, station, folder):
+    def nameFile(self, station, folder, line):
         self.station = station
         self.folder = folder
-        if self.side == "RS":
-            return self.nameBase + self.folder +"\\" + self.side + self.station +  "DAY" + "\\" + self.side + self.station + "Report" + self.today + ".csv"
+        self.line = line
+        if (self.station == "215") or (self.station == "195"):
+            return self.nameBase + self.folder +"\\" + self.side + self.station +  "DAY" + "\\" + self.side + self.station + "Report" + self.today + "_" + self.line + ".csv"
 
-        if self.side == "FS":
-            return self.nameBase + self.folder +"\\"  + self.side + "Report" + self.today + ".csv"
+        if (self.station == "155"):
+            return self.nameBase + self.folder +"\\"  + self.side + "Report" + self.today + "_" + self.line + ".csv"
         
+        if (self.station == "FS"):
+            return self.nameBase + self.folder +"\\" + self.side + "DAY" + "\\" + self.side + "Report" + self.today + "_" + self.line + ".csv"
+        if (self.station == "RS"):
+            return self.nameBase + self.folder +"\\" + self.side +  "DAY" + "\\" + self.side + "Report" + self.today + "_" + self.line + ".csv"

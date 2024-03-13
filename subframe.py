@@ -35,7 +35,7 @@ class subframe:
         self.station = station
         self.line = line
         if (self.station == "215") or (self.station == "195"):
-            return self.nameBase + "Graphs\\" + self.side + self.station +  "DAY" + "\\" + self.side + "Report" + self.today +"_" + self.station + "_" + self.line + ".png"
+            return self.nameBase + "Graphs\\" + self.side + "Report" + self.today +"_" + self.station + "_" + self.line + ".png"
 
         if self.station == "155":
             return self.nameBase + "Graphs\\"  + self.side + "Report" + self.today + "_" + self.station + "_" + self.line + ".png"

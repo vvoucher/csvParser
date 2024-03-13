@@ -55,8 +55,12 @@ def filter_NG(df, line, which):
         except:
             # print(name, l)
             exit("EXIT")
-        toReplace=selectNGlist[name].loc[~(selectNGlist[name] >= mins[l-1]) & (selectNGlist[name] <= maxes[l-1])].values
+        toReplace=selectNGlist[name].loc[(selectNGlist[name] >= mins[l-1]) & (selectNGlist[name] <= maxes[l-1])].values
+        # print(selectNGlist)
+
         selectNGlist[name] = selectNGlist[name].replace(toReplace, np.nan)
+        # print(selectNGlist)
+
         table = table.to_frame()
         result[name]=table
 

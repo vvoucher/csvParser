@@ -16,7 +16,7 @@ def stX_plot(db, line, my_subframe):
 
     my_subframe = subframe()
     short = whichLineID(line)
-    plt.rc('ytick', labelsize=6) 
+    plt.rc('ytick', labelsize=3) 
     DbForLineNmber = pd.DataFrame()
     DbForLineNmber = db[db['LineNumber'] == str(short)]
     
@@ -40,7 +40,7 @@ def stX_plot(db, line, my_subframe):
         maxes = [0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]
     myName = numStation + "_" + line
     
-    fig, ax = plt.subplots(rows, 1)#, sharex='all')
+    fig, ax = plt.subplots(rows, 1, figsize=(6,6))#, sharex= True)#, sharex='all')
     axisy = pd.DataFrame()
     axisx = DbForLineNmber['No']
     legend=[]
@@ -54,10 +54,12 @@ def stX_plot(db, line, my_subframe):
         if col >= 10:
             name = "ST" + str(col)
             # print(DbForLineNmber.head())
+        # plt.subplots()
+
         ax[col-1].xaxis.set_minor_locator(plt.MultipleLocator(5))
         ax[col-1].grid(which= 'minor', linestyle= '-.', linewidth=0.25, axis='x')
-        ax[col-1].grid(which= 'major', linestyle= '-', linewidth=0.75)
-        ax[col-1].set_ylabel(name + ' [mm]', fontsize=5)#, rotation=0)
+        ax[col-1].grid(which= 'major', linestyle= '-', linewidth=0.5)
+        ax[col-1].set_ylabel(name + ' [mm]', fontsize=4)#, rotation=0)
         yloc = plt.MaxNLocator(max_yticks)
         ax[col-1].yaxis.set_major_locator(yloc)
         legend.append(name)
@@ -85,7 +87,7 @@ def stX_plot(db, line, my_subframe):
         lower = np.linspace(mins[col-1], mins[col-1], axisx.size)
         
         ax[col-1].plot(axisx, lower,  '-.',axisx, upper,  '-.',linewidth=0.5, color = 'red')
-        ax[col-1].plot(axisx,axisy[name])
+        ax[col-1].plot(axisx,axisy[name], linewidth = 0.8 )
    
     # graphName = subframe.nameGraph(sta)
     graphName = my_subframe.nameGraph(numStation, line)  

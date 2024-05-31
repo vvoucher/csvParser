@@ -5,7 +5,10 @@ def create_timestamp(df):
     df['FullDate']= df['Date'] + ' ' + df['Time']
     for n in range(0,len(df['Time'])):
         sum = df['Date'].iloc[n] + " " + df['Time'].iloc[n]
-        format_date = (datetime.strptime(sum, '%Y/%m/%d %H:%M:%S')).timestamp()
+        try:
+            format_date = (datetime.strptime(sum, '%Y/%m/%d %H:%M:%S')).timestamp()
+        except:
+            format_date = (datetime.strptime(sum, '%d.%m.%Y %H:%M:%S')).timestamp()
         if format_date != 0:
             newTable.append(int(format_date))
 

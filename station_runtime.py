@@ -5,30 +5,35 @@ import pandas  as pd
 from no_file import no_file
 
 def station_runtime(db):
-    my_subframe = subframe()
+    
     station = station_from_col(db)[0]
+    if station == "155":
+        side = "FS"
+    if station == ("195") or ("215"):
+        side = "RS"
+    print(station)
+    my_subframe = subframe(side)
+    A1 = NG_for_line(db, station, "A1", my_subframe)
+    A2 = NG_for_line(db, station, "A2", my_subframe)
+    A3 = NG_for_line(db, station, "A3", my_subframe)
+    
+    indexes =   [A1.name, A2.name, A3.name         ]
+    count =     [A1.count, A2.count, A3.count      ]
+    ngTable =   [A1.ngCount, A2.ngCount, A3.ngCount]
+    prcTable =  [A1.procent, A2.procent, A3.procent] 
 
-    A1_195 = NG_for_line(db, station, "A1", my_subframe)
-    A2_195 = NG_for_line(db, station, "A2", my_subframe)
-    A3_195 = NG_for_line(db, station, "A3", my_subframe)
+    NG_DF = pd.DataFrame({'Liczba': count,'NG': ngTable,'Procent NG': prcTable, "Name": indexes})
+    NG_DF = NG_DF.set_index('Name')
 
-    indexes =   [A1_195.name, A2_195.name, A3_195.name         ]
-    count =     [A1_195.count, A2_195.count, A3_195.count      ]
-    ngTable =   [A1_195.ngCount, A2_195.ngCount, A3_195.ngCount]
-    prcTable =  [A1_195.procent, A2_195.procent, A3_195.procent] 
-
-    ngDF = pd.DataFrame({'Liczba': count,'NG': ngTable,'Procent NG': prcTable, "Name": indexes})
-    ngDF = ngDF.set_index('Name')
-
-    qcDF195=pd.concat([A1_195.selectNGlist,A2_195.selectNGlist, A3_195.selectNGlist])
-    qcDF195 = qcDF195.dropna(how='all', axis=1) 
-    qcDF195 = qcDF195.fillna("")
-    qc195name = my_subframe.nameFile(station,"QC", "")
+    QC_DF=pd.concat([A1.selectNGlist,A2.selectNGlist, A3.selectNGlist])
+    QC_DF = QC_DF.dropna(how='all', axis=1) 
+    QC_DF = QC_DF.fillna("")
+    qc_name = my_subframe.nameFile(station,"QC", "")
 
     try:
-        qcDF195.to_csv(qc195name)
+        QC_DF.to_csv(qc_name)
     except:
-        no_file(qc195name)
+        no_file(qc_name)
 
-    return ngDF
+    return NG_DF
 

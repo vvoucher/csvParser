@@ -1,7 +1,10 @@
 import pandas as pd
 
 def set_hours(df):
-    df['Hour'] = pd.to_datetime(df['FullDate'], format='%Y/%m/%d %H:%M:%S', exact=False)
+    try:
+        df['Hour'] = pd.to_datetime(df['FullDate'], format='%Y/%m/%d %H:%M:%S', exact=False)
+    except:
+        df['Hour'] = pd.to_datetime(df['FullDate'], format='%d.%m.%Y %H:%M:%S', exact=False)
     df['Hour'] = df['Hour'].astype(str).str[11:13] 
     table = []
     

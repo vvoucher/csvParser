@@ -9,37 +9,31 @@ from no_file import no_file
 from whichLineID import whichLineID
 from subframe import subframe
 from station_from_col import station_from_col
+from mins_maxes import mins_maxes
 # mins = [0, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0]
 # maxes = [0.8, 0.8, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.8, 0.8, 0.6]
 
 def stX_plot(db, line, my_subframe):
 
-    my_subframe = subframe()
+    
     short = whichLineID(line)
     plt.rc('ytick', labelsize=3) 
     DbForLineNmber = pd.DataFrame()
     DbForLineNmber = db[db['LineNumber'] == str(short)]
     
-    # first = column_count(DbForLineNmber)[0]
-    # last = column_count(DbForLineNmber)[1]
-    # rows = last-first
-    # if rows == 7:
-    #     numStation = "215" 
-    # if rows == 4:
-    #     numStation = "195" 
-    # if rows == 13:
-    #     numStation = "155" 
-
     numStation, rows = station_from_col(DbForLineNmber)
 
     if numStation == "155":
-        mins = [0, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0]
-        maxes = [0.8, 0.8, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.8, 0.8, 0.6]
+        side = "FS"
+
     if numStation == "195" or numStation=="215":
-        mins = [0,0,0,0,0,0,0,0]
-        maxes = [0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]
+        side = "RS"
+
+
+    mins, maxes = mins_maxes(side)
+
     myName = numStation + "_" + line
-    
+
     fig, ax = plt.subplots(rows, 1, figsize=(6,6))#, sharex= True)#, sharex='all')
     axisy = pd.DataFrame()
     axisx = DbForLineNmber['No']
@@ -47,14 +41,11 @@ def stX_plot(db, line, my_subframe):
     fig.suptitle(myName)
 
     max_yticks = 5
-    # print(range(1,rows+1))
     for col in range(1,rows+1): #transponowane bo inaczej wychodzi 24
         if col < 10:
             name = "ST0" + str(col)
         if col >= 10:
             name = "ST" + str(col)
-            # print(DbForLineNmber.head())
-        # plt.subplots()
 
         ax[col-1].xaxis.set_minor_locator(plt.MultipleLocator(5))
         ax[col-1].grid(which= 'minor', linestyle= '-.', linewidth=0.25, axis='x')
@@ -89,12 +80,9 @@ def stX_plot(db, line, my_subframe):
         ax[col-1].plot(axisx, lower,  '-.',axisx, upper,  '-.',linewidth=0.5, color = 'red')
         ax[col-1].plot(axisx,axisy[name], linewidth = 0.8 )
    
-    # graphName = subframe.nameGraph(sta)
     graphName = my_subframe.nameGraph(numStation, line)  
-    # print(my_subframe.nameGraph(numStation, line))
-    # graphName = name_files("","Graphs","_" + myName + ".png")# + ".png"
-    
     try:
         fig.savefig(graphName, dpi=300, format='png')
+        print("Zapisano wykres: ", graphName)
     except:
         no_file(graphName)

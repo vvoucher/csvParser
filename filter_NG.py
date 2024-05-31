@@ -3,19 +3,14 @@ import pandas as pd
 from select_NG import select_NG
 import numpy as np
 from whichLineID import whichLineID
+from mins_maxes import mins_maxes
+
 def filter_NG(df, line, which):
 
     mins = []
     maxes = []
-    # min = [0, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0]
-    # max = [0.8, 0.8, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.8, 0.8, 0.6]
-    if which == "FS":
-        mins = [0, 0, 0, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0]
-        maxes = [0.8, 0.8, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 0.8, 0.8, 0.6]
-    if which == "RS":
-        mins = [0,0,0,0,0,0,0,0]
-        maxes = [0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8]
-    
+
+    mins, maxes = mins_maxes(which)
     line = str(whichLineID(line))
     df = df.loc[(df['LineNumber'] == line)]
     

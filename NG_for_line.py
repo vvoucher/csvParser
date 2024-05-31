@@ -10,22 +10,21 @@ from no_file import no_file
 from whichLineID import whichLineID
 from subframe import subframe
 from station_from_col import station_from_col
-
+which = 0
 class NG_for_line:
     def __init__(self, db, stacja, linia, my_subframe) -> None:
 
-        my_subframe = subframe()
-        # self.line = str(whichLineID(self.line))
-        # self.db= self.db.loc[(db['LineNumber'] == self.line)]
-        
-        # self.ngCount = sum(db['Result'] == "NG")
-        # self.count = len(db['Result'] )
-        # super().__init__()
-        
-        which = my_subframe.which()
         self.db = db
         self.linia = linia
         self.stacja = stacja
+        if self.stacja == "155":
+            which = "FS"
+        if self.stacja == ("195") or ("215"):
+            which = "RS"        
+        my_subframe = subframe(which)
+
+        which = my_subframe.which()
+
         self.db = create_timestamp(self.db)
         self.db = set_hours(self.db)
         self.name = self.stacja + " " + self.linia
@@ -35,7 +34,6 @@ class NG_for_line:
         else:
             self.procent = 0
 
-        pathToSave=name_files(stacja, "Result", "_" + linia + ".csv")
         pathToSave = my_subframe.nameFile(stacja,"Result", linia)
 
         self.filtredlist = self.filtredlist.dropna(how='all', axis=1) 

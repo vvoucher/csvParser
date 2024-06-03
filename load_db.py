@@ -18,12 +18,13 @@ def load_db(station, my_subframe):
 
     try:
         db_backup = open_csv_file(backup)
-        print(len(db_backup))
+        # print(len(db_backup))
         
     except:
         try:
-            print("Nowy backup")
+            print("Tworzę nowy backup")
             db.to_csv(backup, index = False)
+            print(backup)
         except:
             no_file(backup)
 

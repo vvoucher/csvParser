@@ -36,11 +36,10 @@ class NG_for_line:
 
         pathToSave = my_subframe.nameFile(stacja,"Result", linia)
 
-        self.filtredlist = self.filtredlist.dropna(how='all', axis=1) 
-        self.filtredlist = self.filtredlist.fillna("")
-        
         try:
             self.filtredlist.to_csv(pathToSave)
+            self.filtredlist = self.filtredlist.dropna(how='all', axis=1) 
+            self.filtredlist = self.filtredlist.fillna("")
             print("\n   Stacja " + stacja + " " + linia)
             print(tabulate(drop_rows(self.filtredlist), headers=self.filtredlist.head()))
             print("Zapisano dane:       ", pathToSave)

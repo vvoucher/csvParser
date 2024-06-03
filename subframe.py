@@ -40,13 +40,13 @@ class subframe:
         if ((self.station == "215") or (self.station == "195")):
             return self.nameBase + "Result\\BACKUP\\" + self.side + self.station + "DAY\\" + self.side + self.station + "Report" + self.today + ".csv"
         if self.station == "155":
-            return self.nameBase + "BACKUP\\" + self.today + ".csv"
+            return self.nameBase + "BACKUP\\" + self.side + self.station + "Report" + self.today + ".csv"
 
     def nameGraph(self, station, line):
         self.station = station
         self.line = line
         if (self.station == "215") or (self.station == "195"):
-            return self.nameBase + "Graphs\\RS" + self.station + "DAY\\" + self.side + "Report" + self.today +"_" + self.station + "_" + self.line + ".png"
+            return self.nameBase + "Graphs\\"  + self.side + "Report" + self.today +"_" + self.station + "_" + self.line + ".png"
 
         if self.station == "155":
             return self.nameBase + "Graphs\\"  + self.side + "Report" + self.today + "_" + self.station + "_" + self.line + ".png"
@@ -55,6 +55,8 @@ class subframe:
         self.station = station
         self.folder = folder
         self.line = line
+        if(self.nameBase == ""):
+            self.which()
         if (self.station == "215") or (self.station == "195"):
             return self.nameBase + self.folder +"\\" + self.side + self.station +  "DAY" + "\\" + self.side + self.station + "Report" + self.today + "_" + self.line + ".csv"
         if (self.station == "155"):

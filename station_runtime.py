@@ -29,7 +29,7 @@ def station_runtime(db):
     QC_DF = QC_DF.dropna(how='all', axis=1) 
     QC_DF = QC_DF.fillna("")
     qc_name = my_subframe.nameFile(station,"QC", "")
-
+    # print(qc_name)
     try:
         QC_DF.to_csv(qc_name)
     except:

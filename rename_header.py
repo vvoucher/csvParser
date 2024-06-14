@@ -12,5 +12,12 @@ def rename_header(df):
             columnNames.append("ST0" + str(col-first+1))
         if (col-first) >= 9:
             columnNames.append("ST" + str(col-first+1))
-    df.columns = columnNames + [*df.columns[last:]]
+
+    for pos in range(last, len(df.T)):
+        max = len(df.columns[pos])
+        if max > 6:
+            max = 4
+        columnNames.append(df.columns[pos][0:max])
+
+    df.columns = columnNames#+ [*df.columns[(last+1):]]
     return df

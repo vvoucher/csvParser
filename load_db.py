@@ -20,7 +20,6 @@ def load_db(station, my_subframe):
     print("Ścieżka pliku: ", file)
     try:        
         db = open_csv_file(file)
-
         db = rename_header(db) 
         org_len=len(db.T)
     except:
@@ -53,11 +52,11 @@ def load_db(station, my_subframe):
         for col in range(1,org_len):
             db_out.index = db_diff.index     
             db_out[db.columns[col]]=db_diff[db.columns[col]]
-
+        db_diff.index=range(0,len(db_diff))
         db=db_diff
         db_backup=db_diff
         try:
-            db_out.to_csv(backup, index = False)
+            db_out.to_csv(backup)
             print("Zapisano nowy backup: ", backup)
         except:
             no_file(backup)        

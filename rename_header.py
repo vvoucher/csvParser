@@ -5,7 +5,7 @@ def rename_header(df):
 
     first = table[0]
     last = table[1]
-
+    # print(df)
     columnNames = ['No','Date','Time','ID','Result']
     for col in range(first,last):
         if (col-first) < 9:

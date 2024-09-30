@@ -7,7 +7,7 @@ class subframe:
         nameBase = ""
         self.side = side
         self.today = today_to_file() 
-        # self.today = "2024_6_8"
+        self.today = "2024_6_8" # comment this out before sending to production
         self.nameBase = nameBase
     
 

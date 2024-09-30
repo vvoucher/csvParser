@@ -39,7 +39,19 @@ if(where == "RS"):
     db215 = load_db("215", my_subframe)
     ngDF195 = station_runtime(db195)
     ngDF215 = station_runtime(db215)
-    ngDF = pd.concat([ngDF195,ngDF215])
+    # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    # try:
+    #     for db in range(0, len(list(ngDF195))):
+    #         if list(ngDF195)[db] == list(ngDF215)[db]:
+    #             print("same")
+    #             print(list(ngDF195)[db], "==" ,list(ngDF215)[db])
+    #         else:
+    #             print("else")
+    #             print(list(ngDF195)[db], "<>" ,list(ngDF215)[db])
+    # except:
+    #     0
+    # print(list(ngDF195),list(ngDF215))
+    ngDF = pd.concat([ngDF215,ngDF195])
 
 dayResultFileName = my_subframe.nameFile(where,"Result","")
 try:

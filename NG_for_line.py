@@ -10,10 +10,13 @@ from no_file import no_file
 from whichLineID import whichLineID
 from subframe import subframe
 from station_from_col import station_from_col
+import numpy as np
+import pandas as pd
 which = 0
 class NG_for_line:
     def __init__(self, db, stacja, linia, my_subframe) -> None:
-
+        self.namesNgDb = []
+        self.counNgDb = []
         self.db = db
         self.linia = linia
         self.stacja = stacja
@@ -35,16 +38,27 @@ class NG_for_line:
             self.procent = 0
 
         pathToSave = my_subframe.nameFile(stacja,"Result", linia)
+        # try:
+        self.filtredlist.to_csv(pathToSave)
+        for i in range(0,len((self.filtredlist).T)):
+            {
+                self.namesNgDb.append(self.filtredlist.sum(axis=0)[i]),
+                self.counNgDb.append(self.filtredlist.columns.values.tolist()[i]),
+                # print(self.filtredlist.sum(axis=0)[i]),
+                # print(self.filtredlist.columns.values.tolist()[i])
 
-        try:
-            self.filtredlist.to_csv(pathToSave)
-            self.filtredlist = self.filtredlist.dropna(how='all', axis=1) 
-            self.filtredlist = self.filtredlist.fillna("")
-            print("\n   Stacja " + stacja + " " + linia)
-            print(tabulate(drop_rows(self.filtredlist), headers=self.filtredlist.head()))
-            print("Zapisano dane:       ", pathToSave)
-        except:
-            no_file(pathToSave)
+            }
+        self.filtredlist = self.filtredlist.dropna(how='all', axis=1) 
+        
+        self.summedNg = pd.DataFrame(self.namesNgDb, self.counNgDb).T
+        # print(self.summedNg)
+        self.filtredlist = self.filtredlist.fillna("")     
+        print("\n   Stacja " + stacja + " " + linia)
+        print(tabulate(drop_rows(self.filtredlist), headers=self.filtredlist.head()))
+      
+        print("Zapisano dane:       ", pathToSave)
+        # except:
+        #     no_file(pathToSave)
 
 
 
